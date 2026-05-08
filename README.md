@@ -71,3 +71,54 @@
 3. **看结果**：AI 生成代码并 Apply 后，在终端运行 `streamlit run 你的文件名.py`。你的浏览器会自动打开一个本地网页，见证奇迹！
 
 4. **不断迭代**：继续对着 AI 提出修改意见，比如 *"帮我修一下运行错误"*，或者 *"在左边加一个滑动条，只显示筛选后的数据..."*。
+
+---
+
+## **五、本仓库看板说明（作品功能与运行）**
+
+本仓库已实现赛题 **基础关卡** 与 **进阶关卡** 要求，并采用深色科技感主题（自定义 CSS + Plotly Dark + CARTO 暗色底图）。
+
+### **功能对照**
+
+| 关卡 | 要求 | 实现说明 |
+| :--- | :--- | :--- |
+| 基础 | pandas 读取 `data/signal_samples.csv` | `signal_processing.load_signal_data()` |
+| 基础 | 交互地图 + 经纬度打点，RSRP 配色（≥−90 绿、≤−110 红，中间渐变） | PyDeck `ScatterplotLayer`（「2D 信号散点」标签页） |
+| 基础 | 柱状图或饼图：频段小区数 / 终端占比 | 地图下方双栏：主图可在侧边栏切换，副图为另一类统计 |
+| 进阶 | 左侧边栏：频段、RSRP 范围筛选，联动地图与图表 | `st.sidebar` + 对 `df_view` 统一筛选 |
+| 进阶 | 3D 地图，柱高随 `Download_Mbps` | PyDeck `ColumnLayer`（「3D 下载速率柱图」标签页） |
+| 进阶 | 核心代码注释 + 单元测试 | `signal_processing.py` 文档字符串；`tests/test_signal_processing.py`（pytest） |
+
+### **环境准备**
+
+```bash
+cd /path/to/code-with-ai-contest
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### **启动看板**
+
+```bash
+streamlit run app.py
+```
+
+浏览器将打开本地页面（默认 `http://localhost:8501`）。左侧调整 **频段** 与 **RSRP 双端滑动条** 后，地图与统计图会即时刷新。
+
+### **运行单元测试**
+
+```bash
+pytest tests/ -v
+```
+
+### **仓库结构（主要文件）**
+
+- `app.py` — Streamlit 看板入口与 PyDeck / Plotly 可视化  
+- `signal_processing.py` — 数据加载、筛选、RSRP 配色与聚合统计（可测逻辑）  
+- `tests/test_signal_processing.py` — 单元测试  
+- `data/signal_samples.csv` — 赛题提供的 5G 模拟数据  
+
+### **提交提醒（赛方要求）**
+
+完赛后请按赛题说明打 Tag 并推送：`basic-done` / `advanced-done`；并补充运行截图与 `AI_PROMPTS.md` 交互记录。
